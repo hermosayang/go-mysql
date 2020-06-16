@@ -112,6 +112,12 @@ func (c *Canal) runSyncBinlog() error {
 				}
 			}
 			continue
+		case *replication.RowsQueryEvent:
+			log.Infof("handle rows query event, query: %s", e.Query)
+			if err = c.eventHandler.OnDML(e); err != nil {
+				return errors.Trace(err)
+			}
+
 		case *replication.XIDEvent:
 			savePos = true
 			// try to save the position later
