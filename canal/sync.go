@@ -2,6 +2,7 @@ package canal
 
 import (
 	"fmt"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -147,14 +148,18 @@ func (c *Canal) runSyncBinlog() error {
 			}
 		case *replication.QueryEvent:
 			stmts, _, err := c.parser.Parse(string(e.Query), "", "")
-			log.Infof("handle query event:%s, parsed stmts, len: %d, %v", string(e.Query), len(stmts), stmts)
+			log.Debugf("handle query event:%s, parsed stmts, len: %d, %v", string(e.Query), len(stmts), stmts)
 			if err != nil {
 				log.Errorf("parse query(%s) err %v, will skip this event", e.Query, err)
 				continue
 			}
+			if strings.Contains(string(e.Query), "FLUSH TABLES") {
+				log.Debugf("handle query event, FLUSH TABLES, set savePos =  true")
+				savePos = true
+			}
 			for _, stmt := range stmts {
 				nodes := parseStmt(stmt)
-				log.Infof("handle query event, foreach stmts, len(nodes): %d", len(nodes))
+				log.Debugf("handle query event, foreach stmts, len(nodes): %d", len(nodes))
 				for _, node := range nodes {
 					if node.db == "" {
 						node.db = string(e.Schema)
