@@ -113,7 +113,7 @@ func (c *Canal) runSyncBinlog() error {
 			}
 			continue
 		case *replication.RowsQueryEvent:
-			log.Infof("handle rows query event, query: %s", e.Query)
+			log.Debugf("handle rows query event, query: %s", e.Query)
 			if err = c.eventHandler.OnDML(e); err != nil {
 				return errors.Trace(err)
 			}
@@ -147,12 +147,14 @@ func (c *Canal) runSyncBinlog() error {
 			}
 		case *replication.QueryEvent:
 			stmts, _, err := c.parser.Parse(string(e.Query), "", "")
+			log.Infof("handle query event, parsed stmts: %v", stmts)
 			if err != nil {
 				log.Errorf("parse query(%s) err %v, will skip this event", e.Query, err)
 				continue
 			}
 			for _, stmt := range stmts {
 				nodes := parseStmt(stmt)
+				log.Infof("handle query event, foreach stmts, len(nodes): %d", len(nodes))
 				for _, node := range nodes {
 					if node.db == "" {
 						node.db = string(e.Schema)
