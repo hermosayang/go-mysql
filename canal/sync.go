@@ -147,7 +147,7 @@ func (c *Canal) runSyncBinlog() error {
 			}
 		case *replication.QueryEvent:
 			stmts, _, err := c.parser.Parse(string(e.Query), "", "")
-			log.Infof("handle query event, parsed stmts: %v", stmts)
+			log.Infof("handle query event:%s, parsed stmts, len: %d, %v", string(e.Query), len(stmts), stmts)
 			if err != nil {
 				log.Errorf("parse query(%s) err %v, will skip this event", e.Query, err)
 				continue
