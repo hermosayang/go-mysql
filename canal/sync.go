@@ -3,7 +3,6 @@ package canal
 import (
 	"fmt"
 	"os"
-	"strings"
 	"sync/atomic"
 	"time"
 
@@ -154,10 +153,6 @@ func (c *Canal) runSyncBinlog() error {
 			if err != nil {
 				log.Errorf("parse query(%s) err %v, will skip this event", e.Query, err)
 				continue
-			}
-			if strings.Contains(string(e.Query), "FLUSH TABLES") {
-				log.Debugf("handle query event, FLUSH TABLES, set savePos =  true")
-				savePos = true
 			}
 			for _, stmt := range stmts {
 				nodes := parseStmt(stmt)
