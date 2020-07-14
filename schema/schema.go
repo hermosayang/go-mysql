@@ -108,6 +108,9 @@ func (ta *Table) AddColumn(name string, columnType string, collation string, ext
 	} else if strings.HasPrefix(columnType, "varbinary") {
 		ta.Columns[index].Type = TYPE_BINARY
 		ta.Columns[index].MaxSize = getSizeFromColumnType(columnType)
+	} else if strings.Contains(columnType, "blob") {
+		ta.Columns[index].Type = TYPE_BINARY
+		ta.Columns[index].MaxSize = getSizeFromColumnType(columnType)
 	} else if strings.HasPrefix(columnType, "datetime") {
 		ta.Columns[index].Type = TYPE_DATETIME
 	} else if strings.HasPrefix(columnType, "timestamp") {
