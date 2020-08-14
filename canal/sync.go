@@ -148,6 +148,7 @@ func (c *Canal) runSyncBinlog() error {
 			}
 		case *replication.QueryEvent:
 			e.Dump(os.Stdout)
+			e.Header = ev.Header
 			stmts, _, err := c.parser.Parse(string(e.Query), "", "")
 			log.Debugf("handle query event:%s, parsed stmts, len: %d, %v", string(e.Query), len(stmts), stmts)
 			if err != nil {

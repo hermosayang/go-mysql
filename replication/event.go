@@ -289,6 +289,7 @@ func (e *XIDEvent) Dump(w io.Writer) {
 }
 
 type QueryEvent struct {
+	Header        *EventHeader
 	SlaveProxyID  uint32
 	ExecutionTime uint32
 	ErrorCode     uint16
