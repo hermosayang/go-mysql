@@ -33,8 +33,8 @@ const (
 	TYPE_JSON                 // json
 	TYPE_DECIMAL              // decimal
 	TYPE_MEDIUM_INT
-	TYPE_BINARY               // binary, varbinary
-	TYPE_POINT                // coordinates
+	TYPE_BINARY // binary, varbinary
+	TYPE_POINT  // coordinates
 )
 
 type TableColumn struct {
@@ -165,7 +165,7 @@ func getSizeFromColumnType(columnType string) uint {
 		return 0
 	}
 
-	i, err := strconv.Atoi(columnType[startIndex+1:endIndex])
+	i, err := strconv.Atoi(columnType[startIndex+1 : endIndex])
 	if err != nil || i < 0 {
 		return 0
 	}
@@ -424,15 +424,17 @@ func (ta *Table) GetPKValues(row []interface{}) ([]interface{}, error) {
 	indexes := ta.PKColumns
 	if len(indexes) == 0 {
 		return nil, errors.Errorf("table %s has no PK", ta)
-	} else if len(ta.Columns) != len(row) {
+	} /* else if len(ta.Columns) != len(row) {
 		return nil, errors.Errorf("table %s has %d columns, but row data %v len is %d", ta,
 			len(ta.Columns), row, len(row))
-	}
+	}*/
 
 	values := make([]interface{}, 0, len(indexes))
 
 	for _, index := range indexes {
-		values = append(values, row[index])
+		if index < len(row) {
+			values = append(values, row[index])
+		}
 	}
 
 	return values, nil
