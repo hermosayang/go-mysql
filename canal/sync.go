@@ -145,7 +145,7 @@ func (c *Canal) runSyncBinlog() error {
 			}
 			if err := c.eventHandler.OnGTID(gtid); err != nil {
 				return errors.Trace(err)
-			}
+			}/*
 		case *replication.QueryEvent:
 			e.Dump(os.Stdout)
 			e.Header = ev.Header
@@ -177,7 +177,7 @@ func (c *Canal) runSyncBinlog() error {
 			}
 			if savePos && e.GSet != nil {
 				c.master.UpdateGTIDSet(e.GSet)
-			}
+			}*/
 		default:
 			continue
 		}
