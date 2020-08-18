@@ -2,7 +2,6 @@ package canal
 
 import (
 	"fmt"
-	"os"
 	"sync/atomic"
 	"time"
 
