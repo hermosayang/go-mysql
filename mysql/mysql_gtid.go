@@ -420,8 +420,10 @@ func (s *MysqlGTIDSet) Equal(o GTIDSet) bool {
 func (s *MysqlGTIDSet) String() string {
 	// To store the uuids in slice in sorted order
 	uuids := make([]string, len(s.Sets))
+    i := 0
 	for uuid, _ := range s.Sets {
-		uuids = append(uuids, uuid)
+		uuids[i] = uuid
+		i++
 	}
 	sort.Strings(uuids)
 
