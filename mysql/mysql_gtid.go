@@ -418,11 +418,18 @@ func (s *MysqlGTIDSet) Equal(o GTIDSet) bool {
 }
 
 func (s *MysqlGTIDSet) String() string {
+	// To store the uuids in slice in sorted order
+	uuids := make([]string, len(s.Sets))
+	for uuid, _ := range s.Sets {
+		uuids = append(uuids, uuid)
+	}
+	sort.Strings(uuids)
+
 	var buf bytes.Buffer
 	sep := ""
-	for _, set := range s.Sets {
+	for _, uuid := range uuids {
 		buf.WriteString(sep)
-		buf.WriteString(set.String())
+		buf.WriteString(s.Sets[uuid].String())
 		sep = ","
 	}
 
